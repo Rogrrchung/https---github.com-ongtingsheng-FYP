@@ -1,0 +1,96 @@
+/* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f7fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Container */
+.container {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+}
+
+/* Title */
+h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: #555;
+    font-size: 14px;
+}
+
+/* PIN Input */
+.pin-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.pin-input {
+    width: 40px;
+    height: 50px;
+    text-align: center;
+    font-size: 20px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.pin-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Error Message */
+.error-message {
+    color: red;
+    font-size: 14px;
+    height: 16px;
+    margin-bottom: 10px;
+}
+
+/* Verify Button */
+.verify-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.verify-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Resend Link */
+.resend-text {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.resend-text a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.resend-text a:hover {
+    text-decoration: underline;
+}

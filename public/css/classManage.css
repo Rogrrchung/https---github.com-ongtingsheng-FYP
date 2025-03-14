@@ -1,0 +1,71 @@
+/* Global Variables */
+:root {
+    --primary-color: #007BFF;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --white: #fff;
+    --border-radius: 5px;
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Container */
+.container {
+    width: 90%;
+    margin: 20px auto;
+    background: var(--white);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+/* Header */
+.header {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.highlight {
+    color: var(--text-color);
+    font-weight: bold;
+}
+
+/* Buttons */
+.btn {
+    margin-left: 10px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.btn:hover,
+.btn:focus {
+    opacity: 0.9;
+}
+
+.export {
+    background: var(--secondary-color);
+    color: var(--white);
+}
+
+.add {
+    background: var(--primary-color);
+    color: var(--white);
+}
+
+

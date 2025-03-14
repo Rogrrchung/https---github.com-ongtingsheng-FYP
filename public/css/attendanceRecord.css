@@ -1,0 +1,263 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    font-size: 24px;
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+.highlight {
+    color: #333;
+    font-weight: bold;
+}
+
+/* Back Button */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: #6c757d;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.back-btn:hover {
+    background: #5a6268;
+}
+
+/* Table Styles */
+.schedule-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header */
+.schedule-table th {
+    background: #2c3e50;
+    /* Deep blue for header */
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Table Cells */
+.schedule-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+    /* Light gray border */
+}
+
+/* Striped Rows */
+.schedule-table tbody tr:nth-child(even) {
+    background: #f9f9f9;
+    /* Light gray for even rows */
+}
+
+/* Hover Effect */
+.schedule-table tbody tr:hover {
+    background: #ecf0f1;
+    /* Light blue-gray on hover */
+    transition: background 0.3s ease;
+}
+
+/* Rounded Corners for First and Last Rows */
+.schedule-table tr:first-child th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.schedule-table tr:first-child th:last-child {
+    border-top-right-radius: 10px;
+}
+
+.schedule-table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.schedule-table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+/* Optional: Responsive Table */
+@media (max-width: 768px) {
+    .schedule-table {
+        display: block;
+        overflow-x: auto;
+        /* Horizontal scroll for small screens */
+    }
+}
+
+/* Status Styles */
+.status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    /* Pill-shaped badge */
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    transition: all 0.3s ease;
+    /* Smooth transition */
+}
+
+/* Active (Present) Status */
+.status.active {
+    background: linear-gradient(135deg, #28a745, #218838);
+    /* Green gradient */
+    color: white;
+}
+
+/* Inactive (Absent) Status */
+.status.inactive {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    /* Red gradient */
+    color: white;
+}
+
+.status:hover {
+    transform: translateY(-1px);
+    /* Slight lift on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    /* Larger shadow on hover */
+}
+
+.status i {
+    margin-right: 4px;
+    font-size: 10px;
+}
+
+/* Action Button Styles */
+.action-btn {
+    background: linear-gradient(135deg, #007BFF, #0056b3);
+    /* Gradient background */
+    border: none;
+    border-radius: 8px;
+    /* Rounded corners */
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    /* Slightly bold text */
+    padding: 10px 20px;
+    /* More padding for a larger button */
+    text-transform: uppercase;
+    /* Uppercase text for a professional look */
+    letter-spacing: 0.5px;
+    /* Slightly spaced letters */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Subtle shadow */
+    transition: all 0.3s ease;
+    /* Smooth transition for all properties */
+    outline: none;
+    /* Remove default outline */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    /* Space between icon and text */
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #003d80);
+    /* Darker gradient on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    /* Larger shadow on hover */
+    transform: translateY(-2px);
+    /* Slight lift effect */
+}
+
+.action-btn:active {
+    transform: translateY(0);
+    /* Reset lift effect when clicked */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Reset shadow when clicked */
+}
+
+/* Specific styles for Present and Absent buttons */
+.present-btn {
+    background: linear-gradient(135deg, #28a745, #218838);
+    /* Green gradient */
+}
+
+.present-btn:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34);
+    /* Darker green gradient */
+}
+
+.absent-btn {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    /* Red gradient */
+}
+
+.absent-btn:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+    /* Darker red gradient */
+}
+
+/* Optional: Add icons to buttons using Font Awesome */
+.action-btn i {
+    font-size: 16px;
+}
+
+/* Disabled state for buttons (if needed) */
+.action-btn:disabled {
+    background: #6c757d;
+    /* Gray background */
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.generate-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.generate-btn:hover {
+    background-color: #0056b3;
+}
+
+.pin-display {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #333;
+}

@@ -1,0 +1,73 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+.container {
+    width: 90%;
+    margin: auto;
+    margin-top: 30px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: #ffffff;
+    overflow: hidden;
+    border-radius: 8px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.student-row {
+    background-color: #eaf6ff;
+    font-weight: bold;
+    color: #333;
+}
+.attendance-percentage {
+    font-weight: bold;
+}
+.low-attendance {
+    color: red;
+}
+.high-attendance {
+    color: green;
+}
+.container-footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+    table {
+        font-size: 14px;
+    }
+    th, td {
+        padding: 8px;
+    }
+}
