@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db = Database::getInstance()->getConnection();
 
         // Fetch class details
-        $stmt = $db->prepare("SELECT pin_code, start_time, end_time, first_day, last_day FROM class WHERE class_id = :class_id LIMIT 1");
+        $stmt = $db->prepare("SELECT pin_code, start_time, end_time, first_day, last_day, start_date, end_date FROM class WHERE class_id = :class_id LIMIT 1");
         $stmt->bindParam(':class_id', $class_id, PDO::PARAM_INT);
         $stmt->execute();
         $class = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -44,13 +44,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Ensure timezone is set correctly
         date_default_timezone_set('Asia/Kuala_Lumpur');
 
-        // Get current time and day
+        // Get current date, time, and day
+        $current_date = date("Y-m-d");
         $current_time = date("H:i:s");
         $current_day = strtolower(date("D")); // Example: "fri"
 
         // Convert stored first_day and last_day to lowercase 3-letter format
         $first_day = strtolower(substr($class['first_day'], 0, 3));
         $last_day = strtolower(substr($class['last_day'], 0, 3));
+
+        // Check if current date is within start_date and end_date
+        if ($current_date < $class['start_date'] || $current_date > $class['end_date']) {
+            $_SESSION['message'] = ['text' => "Attendance is only allowed between <b>{$class['start_date']}</b> and <b>{$class['end_date']}</b>.", 'type' => "error"];
+            header("Location: ../views/mfa.php");
+            exit();
+        }
 
         // Check if today is within the class schedule
         $allowed_days = [$first_day, $last_day];
@@ -77,14 +85,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($attendanceStatus === 'present') {
             $_SESSION['message'] = ['text' => "✅ Attendance already marked for today. No further action needed.", 'type' => "success"];
         } elseif ($attendanceStatus === 'absent') {
-            $stmt = $db->prepare("UPDATE student_classes SET status = 'present' WHERE student_id = :student_id AND class_id = :class_id");
+            // Update attendance status and set date_taken & time_taken
+            $stmt = $db->prepare("
+        UPDATE student_classes 
+        SET status = 'present', date_taken = CURDATE(), time_taken = CURTIME() 
+        WHERE student_id = :student_id AND class_id = :class_id
+    ");
             $stmt->bindParam(':student_id', $student_id, PDO::PARAM_INT);
             $stmt->bindParam(':class_id', $class_id, PDO::PARAM_INT);
             $stmt->execute();
+
             $_SESSION['message'] = ['text' => "🎉 Attendance successfully updated from <b>absent</b> to <b>present</b>.", 'type' => "success"];
         } else {
             $_SESSION['message'] = ['text' => "⚠️ No attendance record found. Please contact your lecturer.", 'type' => "error"];
         }
+
 
     } catch (PDOException $e) {
         $_SESSION['message'] = ['text' => "Database error: " . $e->getMessage(), 'type' => "error"];

@@ -35,9 +35,8 @@ $students = $studentClass->getStudentsByClass($class_id);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Records</title>
-    <link rel="stylesheet" href="../public/css/attendanceRecord.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="../public/css/attendanceRecord.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Font Awesome -->
 </head>
 <style>
     .export-btn {
@@ -87,9 +86,9 @@ $students = $studentClass->getStudentsByClass($class_id);
                 <tr>
                     <th>Student ID</th>
                     <th>Student Name</th>
-                    <!-- <th>Date</th> -->
                     <th>Status</th>
-                    <!-- <th>Time Marked</th> -->
+                    <th>Date Marked</th>
+                    <th>Time Marked</th>
                     <th>Action</th>
                     <th>Remove</th>
                 </tr>
@@ -105,6 +104,8 @@ $students = $studentClass->getStudentsByClass($class_id);
                                 <?= $record['status']; ?>
                             </span>
                         </td>
+                        <td><?= !empty($record['date_taken']) ? $record['date_taken'] : 'Not Marked'; ?></td>
+                        <td><?= !empty($record['time_taken']) ? $record['time_taken'] : 'Not Marked'; ?></td>
                         <td>
                             <!-- Form for marking Present -->
                             <form method="POST" action="" style="display: inline;">

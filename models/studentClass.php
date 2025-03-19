@@ -39,7 +39,7 @@ class StudentClass
         $stmt = $this->pdo->prepare("
             SELECT capacity, (SELECT COUNT(*) FROM student_classes WHERE class_id = ?) AS current_students
             FROM class
-            WHERE class_id = ?
+            WHERE class_id = ? 
         ");
         $stmt->execute([$class_id, $class_id]);
         return $stmt->fetch();
@@ -48,7 +48,7 @@ class StudentClass
     public function getAttendanceRecords($class_id)
     {
         $stmt = $this->pdo->prepare("
-            SELECT sc.student_id, s.username AS student_name, sc.status
+            SELECT sc.student_id, s.username AS student_name, sc.time_taken, sc.date_taken, sc.status
             FROM student_classes sc
             JOIN students s ON sc.student_id = s.student_id
             WHERE sc.class_id = :class_id
@@ -60,16 +60,26 @@ class StudentClass
     public function markAttendance($student_id, $status, $class_id)
     {
         $stmt = $this->pdo->prepare("
-            UPDATE student_classes
-            SET status = :status
-            WHERE student_id = :student_id AND class_id = :class_id 
-        ");
+        UPDATE student_classes
+        SET status = :status, date_taken = CURDATE(), time_taken = CURTIME()
+        WHERE student_id = :student_id AND class_id = :class_id
+    ");
+
         $stmt->execute([
             ':student_id' => $student_id,
             ':class_id' => $class_id,
-            ':status' => $status,
+            ':status' => $status
         ]);
     }
+
+    public function getClassDetails($class_id)
+    {
+        $stmt = $this->pdo->prepare("SELECT first_day, last_day, start_date, end_date FROM class WHERE class_id = :class_id");
+        $stmt->bindParam(':class_id', $class_id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 
     // Get students already in the class
     public function getStudentsByClass($class_id)

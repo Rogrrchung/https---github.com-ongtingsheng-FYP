@@ -123,11 +123,12 @@ if (isset($_GET['success'])) {
                         <th>Class Name</th>
                         <th>Subject</th>
                         <th>Class Code</th>
-                        <th>Capacity</th>
                         <th>First Day</th>
                         <th>Second Day</th>
                         <th>Start Time</th>
                         <th>End Time</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
                         <th>Students Assigned</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -141,11 +142,12 @@ if (isset($_GET['success'])) {
                                 <td><?= htmlspecialchars($class['class_name']) ?></td>
                                 <td><?= htmlspecialchars($class['subject']) ?></td>
                                 <td><?= htmlspecialchars($class['subject_code']) ?></td>
-                                <td><?= htmlspecialchars($class['capacity']) ?></td>
                                 <td><?= htmlspecialchars($class['first_day']) ?></td>
                                 <td><?= htmlspecialchars($class['last_day']) ?></td>
                                 <td><?= htmlspecialchars($class['start_time']) ?></td>
                                 <td><?= htmlspecialchars($class['end_time']) ?></td>
+                                <td><?= htmlspecialchars($class['start_date']) ?></td>
+                                <td><?= htmlspecialchars($class['end_date']) ?></td>
 
                                 <td><?= $class['students_assigned'] . '/' . $class['capacity'] ?></td>
                                 <td><span class="tableStatus <?= $class['status'] == 'Active' ? 'active' : 'inactive' ?>">
@@ -164,7 +166,7 @@ if (isset($_GET['success'])) {
                                         data-name="<?= $class['class_name']; ?>" data-subject="<?= $class['subject']; ?>"
                                         data-code="<?= $class['subject_code']; ?>" data-capacity="<?= $class['capacity']; ?>"
                                         data-firstday="<?= $class['first_day']; ?>" data-lastday="<?= $class['last_day']; ?>"
-                                        data-start="<?= $class['start_time']; ?>" data-end="<?= $class['end_time']; ?>"
+                                        data-start="<?= $class['start_time']; ?>" data-end="<?= $class['end_time']; ?>" data-startDate="<?= $class['start_date']; ?>" data-endDate="<?= $class['end_date']; ?>"
                                         data-status="<?= $class['status']; ?>">
                                         <i class="fas fa-edit"></i>
                                     </button>
@@ -209,9 +211,6 @@ if (isset($_GET['success'])) {
                     <div class="form-group">
                         <input type="number" name="capacity" placeholder="Capacity" required>
                     </div>
-                    <div class="form-group">
-                        <input type="number" name="total_classes" placeholder="Total Classes" required>
-                    </div>
 
                     <!-- Schedule Section -->
                     <div class="form-group">
@@ -237,6 +236,15 @@ if (isset($_GET['success'])) {
                             <option value="Sat">Saturday</option>
                             <option value="Sun">Sunday</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="start_date">Start Date:</label>
+                        <input type="date" name="start_date" id="start_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">End Date:</label>
+                        <input type="date" name="end_date" id="end_date" required>
                     </div>
 
                     <input type="time" name="start_time" placeholder="Start Time" required>
@@ -293,9 +301,6 @@ if (isset($_GET['success'])) {
                     <label>Capacity</label>
                     <input type="number" name="capacity" id="editClassCapacity">
                 </div>
-                <div class="form-group">
-                    <input type="number" name="total_classes" placeholder="Total Classes" required>
-                </div>
 
                 <!-- Schedule Section -->
                 <div class="form-group">
@@ -322,6 +327,15 @@ if (isset($_GET['success'])) {
                         <option value="Sat">Saturday</option>
                         <option value="Sun">Sunday</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Start Date:</label>
+                    <input type="date" name="start_date" id="editStartDate" required>
+                </div>
+                <div class="form-group">
+                    <label>End Date:</label>
+                    <input type="date" name="end_date" id="editEndDate" required>
                 </div>
 
                 <div class="form-group">
@@ -364,6 +378,8 @@ if (isset($_GET['success'])) {
                 document.getElementById("editLastDay").value = this.getAttribute("data-lastday");
                 document.getElementById("editStartTime").value = this.getAttribute("data-start");
                 document.getElementById("editEndTime").value = this.getAttribute("data-end");
+                document.getElementById("editStartDate").value = this.getAttribute("data-startDate");
+                document.getElementById("editEndDate").value = this.getAttribute("data-endDate");
                 document.getElementById("editClassStatus").value = this.getAttribute("data-status");
                 event.preventDefault();
                 // Show modal

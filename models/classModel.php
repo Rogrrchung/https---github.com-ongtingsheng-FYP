@@ -13,7 +13,7 @@ class ClassModel
     // Fetch all classes 
     public function getAllClasses()
     {
-        $sql = "SELECT c.class_id, c.class_name, c.subject, c.subject_code, c.capacity, c.total_classes, c.first_day, c.last_day, c.start_time, c.end_time,
+        $sql = "SELECT c.class_id, c.class_name, c.subject, c.subject_code, c.capacity, c.first_day, c.last_day, c.start_time, c.end_time, c.start_date, c.end_date,
                        (SELECT COUNT(*) FROM student_classes sc WHERE sc.class_id = c.class_id) AS students_assigned, 
                        CASE WHEN c.status = 1 THEN 'Active' ELSE 'Inactive' END AS status
                        FROM class c";
@@ -30,15 +30,15 @@ class ClassModel
         return $stmt->fetch();
     }
 
-    // Add a new class
-    public function addClass($class_name, $subject, $subject_code, $capacity, $total_classes, $first_day, $last_day, $start_time, $end_time, $status)
+    // Add a new class 
+    public function addClass($class_name, $subject, $subject_code, $capacity, $first_day, $last_day, $start_time, $end_time, $start_date, $end_date, $status)
     {
-        $stmt = $this->pdo->prepare("INSERT INTO class (class_name, subject, subject_code, capacity, total_classes, first_day, last_day, start_time, end_time, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        return $stmt->execute([$class_name, $subject, $subject_code, $capacity, $total_classes, $first_day, $last_day, $start_time, $end_time, $status]);
-    }
+        $stmt = $this->pdo->prepare("INSERT INTO class (class_name, subject, subject_code, capacity, first_day, last_day, start_time, end_time, start_date, end_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        return $stmt->execute([$class_name, $subject, $subject_code, $capacity, $first_day, $last_day, $start_time, $end_time, $start_date, $end_date, $status]);
+    } 
 
     // Update a class
-    public function updateClass($class_id, $class_name, $subject, $subject_code, $capacity, $total_classes, $first_day, $last_day, $start_time, $end_time, $status = null)
+    public function updateClass($class_id, $class_name, $subject, $subject_code, $capacity, $first_day, $last_day, $start_time, $end_time, $start_date, $end_date, $status = null)
     {
         // Fetch the existing status if no new status is provided
         if ($status === null) {
@@ -50,10 +50,10 @@ class ClassModel
 
         // Update the class with the correct status
         $stmt = $this->pdo->prepare("UPDATE class 
-                                 SET class_name = ?, subject = ?, subject_code = ?, capacity = ?, total_classes = ?,
-                                     first_day = ?, last_day = ?, start_time = ?, end_time = ?, status = ? 
+                                 SET class_name = ?, subject = ?, subject_code = ?, capacity = ?,
+                                     first_day = ?, last_day = ?, start_time = ?, end_time = ?, start_date = ?, end_date = ?, status = ? 
                                  WHERE class_id = ?");
-        return $stmt->execute([$class_name, $subject, $subject_code, $capacity, $total_classes, $first_day, $last_day, $start_time, $end_time, $status, $class_id]);
+        return $stmt->execute([$class_name, $subject, $subject_code, $capacity, $first_day, $last_day, $start_time, $end_time, $start_date, $end_date, $status, $class_id]);
     }
 
 

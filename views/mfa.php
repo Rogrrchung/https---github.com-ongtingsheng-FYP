@@ -5,7 +5,7 @@ date_default_timezone_set("Asia/Kuala_Lumpur");
 if (!isset($_SESSION['student_id'])) {
     header("Location: testStudentLogin.php");
     exit();
-}
+} 
 ?>
 
 <!DOCTYPE html>

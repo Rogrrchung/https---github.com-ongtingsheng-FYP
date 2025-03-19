@@ -4,20 +4,66 @@ require_once "../config/classDatabase.php";
 try {
     $conn = Database::getInstance()->getConnection();
 
-    // Prepare the query
+    // Prepare the query to get all attendance records for all scheduled classes
     $stmt = $conn->prepare("
-        SELECT 
-            s.student_id,
-            s.username,
-            c.subject,
-            COUNT(CASE WHEN sc.status = 'Present' THEN 1 END) AS present_days,
-            c.total_classes,
-            ROUND((COUNT(CASE WHEN sc.status = 'Present' THEN 1 END) / c.total_classes) * 100, 2) AS attendance_percentage
-        FROM students s
-        JOIN student_classes sc ON s.student_id = sc.student_id
-        JOIN class c ON sc.class_id = c.class_id
-        GROUP BY s.student_id, c.subject, c.total_classes
-        ORDER BY s.student_id, c.subject
+        WITH RECURSIVE DateSeries AS (
+    SELECT 
+        c.class_id, 
+        c.start_date AS class_date, 
+        c.end_date, 
+        WEEKDAY(c.start_date) AS weekday_num,
+        CASE 
+            WHEN c.first_day = 'Mon' THEN 0
+            WHEN c.first_day = 'Tue' THEN 1
+            WHEN c.first_day = 'Wed' THEN 2
+            WHEN c.first_day = 'Thu' THEN 3
+            WHEN c.first_day = 'Fri' THEN 4
+            WHEN c.first_day = 'Sat' THEN 5
+            WHEN c.first_day = 'Sun' THEN 6
+        END AS first_day_num,
+        CASE 
+            WHEN c.last_day = 'Mon' THEN 0
+            WHEN c.last_day = 'Tue' THEN 1
+            WHEN c.last_day = 'Wed' THEN 2
+            WHEN c.last_day = 'Thu' THEN 3
+            WHEN c.last_day = 'Fri' THEN 4
+            WHEN c.last_day = 'Sat' THEN 5
+            WHEN c.last_day = 'Sun' THEN 6
+        END AS last_day_num
+    FROM class c
+    UNION ALL
+    -- Continue generating dates until reaching the end_date
+    SELECT 
+        ds.class_id, 
+        DATE_ADD(ds.class_date, INTERVAL 1 DAY), 
+        ds.end_date,
+        WEEKDAY(DATE_ADD(ds.class_date, INTERVAL 1 DAY)),
+        ds.first_day_num,
+        ds.last_day_num
+    FROM DateSeries ds
+    WHERE ds.class_date < ds.end_date
+)
+SELECT 
+    s.student_id,
+    s.username,
+    c.subject,
+    c.first_day,
+    c.last_day,
+    COUNT(DISTINCT CASE WHEN sc.status = 'Present' THEN sc.date_taken END) AS present_days,
+    COUNT(DISTINCT CASE WHEN WEEKDAY(ds.class_date) IN (ds.first_day_num, ds.last_day_num) THEN ds.class_date END) AS total_scheduled_days,
+    ROUND(
+        (COUNT(DISTINCT CASE WHEN sc.status = 'Present' THEN sc.date_taken END) / 
+        NULLIF(COUNT(DISTINCT CASE WHEN WEEKDAY(ds.class_date) IN (ds.first_day_num, ds.last_day_num) THEN ds.class_date END), 0)) * 100, 
+        2
+    ) AS attendance_percentage
+FROM students s
+JOIN student_classes sc ON s.student_id = sc.student_id
+JOIN class c ON sc.class_id = c.class_id
+JOIN DateSeries ds ON ds.class_id = c.class_id 
+WHERE WEEKDAY(ds.class_date) IN (ds.first_day_num, ds.last_day_num)
+GROUP BY s.student_id, c.subject, c.first_day, c.last_day
+ORDER BY s.student_id, c.subject;
+
     ");
 
     $stmt->execute();
@@ -61,33 +107,27 @@ try {
                     <th>Student ID</th>
                     <th>Name</th>
                     <th>Subject</th>
+                    <th>First Day</th>
+                    <th>Last Day</th>
                     <th>Present Days</th>
-                    <th>Total Classes</th>
+                    <th>Total Scheduled Days</th>
                     <th>Attendance (%)</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $current_student = null;
-                foreach ($students as $row) {
-                    if ($current_student !== $row['student_id']) {
-                        $current_student = $row['student_id'];
-                        echo "<tr class='student-row'>";
-                        echo "<td>{$row['student_id']}</td>";
-                        echo "<td>{$row['username']}</td>";
-                        echo "<td colspan='4'></td>";
-                        echo "</tr>";
-                    }
-                    ?>
+                foreach ($students as $row) { ?>
                     <tr>
-                        <td></td>
-                        <td></td>
+                        <td><?= htmlspecialchars($row['student_id']) ?></td>
+                        <td><?= htmlspecialchars($row['username']) ?></td>
                         <td><?= htmlspecialchars($row['subject']) ?></td>
+                        <td><?= htmlspecialchars($row['first_day']) ?></td>
+                        <td><?= htmlspecialchars($row['last_day']) ?></td>
                         <td><?= htmlspecialchars($row['present_days']) ?></td>
-                        <td><?= htmlspecialchars($row['total_classes']) ?></td>
+                        <td><?= htmlspecialchars($row['total_scheduled_days']) ?></td>
                         <td
                             class="attendance-percentage <?= $row['attendance_percentage'] < 80 ? 'low-attendance' : 'high-attendance' ?>">
-                            <?= htmlspecialchars($row['attendance_percentage']) ?>%
+                            <?= $row['attendance_percentage'] !== null ? htmlspecialchars($row['attendance_percentage']) . '%' : 'N/A' ?>
                         </td>
                     </tr>
                 <?php } ?>
